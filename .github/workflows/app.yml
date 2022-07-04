@@ -8,24 +8,18 @@ jobs:
 
     runs-on: windows-latest
 
-    timeout-minutes: 9999
+    timeout-minutes: 999999
 
     steps:
 
     - name: Download Ngrok.
 
       run: |
-
         Invoke-WebRequest https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
-
-        Invoke-WebRequest https://raw.githubusercontent.com/codegc01/new-vm/main/start.bat -OutFile start.bat
-
-        Invoke-WebRequest https://raw.githubusercontent.com/codegc01/new-vm/main/wallpaper.bat -OutFile wallpaper.bat
-
-        Invoke-WebRequest https://raw.githubusercontent.com/codegc01/new-vm/main/loop.bat-OutFile loop.bat
-
-        Invoke-WebRequest https://raw.githubusercontent.com/codegc01/new-vm/main/push.bat -OutFile push.bat
-
+        Invoke-WebRequest https://raw.githubusercontent.com/codegc01/new-vm/master/start.bat -OutFile start.bat
+        Invoke-WebRequest https://raw.githubusercontent.com/codegc01/new-vm/master/wallpaper.bat -OutFile wallpaper.bat
+        Invoke-WebRequest https://raw.githubusercontent.com/codegc01/new-vm/master/loop.bat -OutFile loop.bat
+        Invoke-WebRequest https://raw.githubusercontent.com/codegc01/new-vm/master/push.bat -OutFile push.bat
     - name: Extract Ngrok File.
 
       run: Expand-Archive ngrok.zip
@@ -41,15 +35,10 @@ jobs:
     - name: Windows10 RDP.
 
       run: |
-
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
-
         Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
-
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
-
         copy wallpaper.bat D:\a\wallpaper.bat
-
     - name: Tunnel.
 
       run: Start-Process Powershell -ArgumentList '-Noexit -Command ".\ngrok\ngrok.exe tcp --region ap 3389"'
